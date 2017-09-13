@@ -58,6 +58,54 @@ train_all_percentiles, test_all_percentiles = extract_percentiles(train.id), ext
 def load_fold(name):
     return np.load('../input/{}_train.npy'.format(name)), np.load('../input/{}_test.npy'.format(name))
 
+# Calculate distance features
+
+def calc_distances(idx, columns, group_columns, h_percentiles, v_percentiles):
+    idx = str(idx)
+    data = pd.read_csv('../input/TrackDistances/{}.csv'.format(idx), engine='c')
+    parts = []
+    for key in range(5):
+        columns = group_columns[key]
+        if idx in columns:
+            columns = list(columns)
+            columns.remove(idx)
+        col_data = data[columns]
+        h_data = np.percentile(col_data.values, h_percentiles, axis=1)
+        result = np.percentile(h_data, v_percentiles, axis=1)
+        parts.append(result.ravel())
+    return np.hstack(parts)
+
+def get_part_distances(part, columns, group_columns, percentiles, n_jobs=-1):
+    parts = Parallel(n_jobs=n_jobs)(
+        delayed(calc_distances)(idx, columns, group_columns, percentiles, percentiles)
+        for idx in part.id)
+    return np.vstack(parts)
+
+def get_distance_features(train, test, percentiles):
+    groups = {}
+    group_columns = {}
+    for key, group in train.groupby('type'):
+        columns = [str(i) for i in group.id]
+        group_columns[key] = columns
+    train_features = get_part_distances(train, columns, group_columns, percentiles)
+    test_features = get_part_distances(test, columns, group_columns, percentiles)
+    return train_features, test_features
+
+
+percentiles = list(range(0, 101, 10))
+for idx, fold in enumerate(folds):
+    fold_train, fold_test = get_distance_features(fold[0], fold[1], percentiles)
+    np.save('../input/fold_{}_distances_train.npy'.format(idx), fold_train)
+    np.save('../input/fold_{}_distances_test.npy'.format(idx), fold_test)
+    print('DONE', idx)
+
+full_train, full_test = get_distance_features(train, test, percentiles)
+np.save('../input/full_distances_train.npy', full_train)
+np.save('../input/full_distances_test.npy', full_test)
+
+
+# Load calculated distance features
+
 fold_distances = [load_fold('fold_{}_distances'.format(i)) for i in range(4)]
 all_fold_distances = np.vstack([f[1] for f in fold_distances])
 all_fold_types = np.hstack([f[1].type.values for f in folds])
