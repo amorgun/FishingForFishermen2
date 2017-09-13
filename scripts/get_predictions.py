@@ -247,5 +247,5 @@ extended_features_with_all_percentiles_test = np.hstack([test_dist, test_speed_m
 parts_1 = [[m.predict_proba(extended_features_test) for m in ms] for ms in [models, lgm_models_1]]
 parts_2 = [[m.predict_proba(extended_features_with_all_percentiles_test) for m in ms] for ms in [models_1, models_2, lgm_models_2, knn_models, mlp_models]]
 result = np.mean([np.mean(p, axis=0) for p in parts_1 + parts_2], axis=0)
-save_result(test.id.values, result, '../input/submission.csv')
+save_result(test.id.values, result, '../submission.csv')
 
