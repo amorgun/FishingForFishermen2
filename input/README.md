@@ -1,12 +1,1 @@
-# FishingForFishermen2
-My solution of FishingForFishermen2 Marathon Match.
-
-[Final leaderboard.](https://community.topcoder.com/longcontest/stats/?module=ViewOverview&rd=16978)
-
-## Usage
-```
-git clone https://github.com/amorgun/FishingForFishermen2.git
-cd FishingForFishermen2
-pip install -r requirements.txt
-bash run.sh
-```
+This is small subset of an actual contest data. You can find full data [here](https://community.topcoder.com/longcontest/?module=ViewProblemStatement&rd=16978&pm=14691).
