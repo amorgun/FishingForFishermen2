@@ -1,6 +1,11 @@
 # FishingForFishermen2
 My solution of FishingForFishermen2 Marathon Match.
 
+## Information
+- [Competition page](https://community.topcoder.com/longcontest/?module=ViewProblemStatement&rd=16978&pm=14691)
+- [Final leaderboard](https://community.topcoder.com/longcontest/stats/?module=ViewOverview&rd=16978)
+- My Topcoder handle: [amorgun](https://www.topcoder.com/members/amorgun/)
+
 [Final leaderboard.](https://community.topcoder.com/longcontest/stats/?module=ViewOverview&rd=16978)
 
 ## Usage
